@@ -1,0 +1,8 @@
+{
+    "env": {
+        "MONGO_ATLAS_USERNAME" : "omnitya",
+        "MONGO_ATLAS_PASSWORD" : "omnitya",
+        "PRODUCT_URL" : "http://localhost:3000/products/",
+        "ORDER_URL" : "http://localhost:3000/orders/"
+    }
+}
