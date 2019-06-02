@@ -5,15 +5,16 @@ const mongoose = require('mongoose');
 
 router.get('/', (req, res, next) => {
     orderModel.find()
+    // .populate('product','_id' )
     .exec()
     .then(docs => {
         const response = {
             count : docs.length,
-            products : docs.map(result =>{
+            orders : docs.map(result =>{
                 return {
-                    product : result.product,
-                    price : result.quantity,
                     Id : result._id,
+                    product : result.product,
+                    quantity : result.quantity,
                     request : {
                         type : 'GET',
                         productUrl : 'http://localhost:3000/products/' + result.product,
@@ -39,16 +40,23 @@ router.get('/:orderId', (req, res, next) => {
         orderModel.findById(orderId)
         .exec()
         .then(result => {
-            res.status(200).json({
-                product : result.product,
-                quantity : result.quantity,
-                Id : result._id,
-                request : {
-                    type : 'GET',
-                    productUrl : 'http://localhost:3000/products/' + result.product,
-                    orderUrl : 'http://localhost:3000/orders/' + result._id
-                }
-            });  
+            console.log(result);
+            if(result){
+                res.status(200).json({
+                    product : result.product,
+                    quantity : result.quantity,
+                    Id : result._id,
+                    request : {
+                        type : 'GET',
+                        url : 'http://localhost:3000/orders/' + result._id
+                    }
+                });
+            } else{
+                res.status(404).json({
+                    message : 'No Entry found for order id.' +orderId
+                })
+            }
+            
         })
         .catch(err => {
             console.log(err);
@@ -59,7 +67,7 @@ router.get('/:orderId', (req, res, next) => {
     } else{
         console.log('Not a valid id');
         res.status(404).json({
-            message : "No Entry found for provided order id."
+            message : "No Entry found for provided orderId id."
         })
     }
 });
@@ -124,15 +132,17 @@ router.put('/:orderId', (req, res, next) => {
 });
 
 router.delete('/:orderId', (req, res, next) => {
-    const productId = req.params.productId;
-    if(mongoose.Types.ObjectId.isValid(req.body.product)){
-        productModel.remove({
-            _id : productId
+    const orderId = req.params.orderId;
+    if(mongoose.Types.ObjectId.isValid(orderId)){
+        orderModel.remove({
+            _id : orderId
         })
         .exec()
         .then(result =>{
-            console.log('Deleted product item with id ::', productId);
-            res.status(200).json(result);
+            console.log('Deleted order item with id ::', orderId);
+            res.status(200).json({
+                message : 'Deleted order item with id '+ orderId
+            });
         })
         .catch(err => {
             console.error(err);
@@ -142,9 +152,9 @@ router.delete('/:orderId', (req, res, next) => {
         });
     }
     else {
-        console.log('No such product id found to delete');
+        console.log('No such orderId id found to delete');
         res.status(404).json({
-            message : 'No such product id found to delete '+ productId
+            message : 'No such orderId id found to delete '+ orderId
         });
     }
 });

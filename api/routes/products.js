@@ -121,14 +121,16 @@ router.put('/:productId', (req, res, next) => {
 
 router.delete('/:productId', (req, res, next) => {
     const productId = req.params.productId;
-    if(mongoose.Types.ObjectId.isValid(req.body.product)){
+    if(mongoose.Types.ObjectId.isValid(productId)){
         productModel.remove({
             _id : productId
         })
         .exec()
         .then(result =>{
             console.log('Deleted product item with id ::', productId);
-            res.status(200).json(result);
+            res.status(200).json({
+                message : 'Deleted product item with id '+ productId
+            });
         })
         .catch(err => {
             console.error(err);
@@ -138,9 +140,9 @@ router.delete('/:productId', (req, res, next) => {
         });
     }
     else {
-        console.log('No such product id found to delete');
+        console.log('No such productId id found to delete');
         res.status(404).json({
-            message : 'No such product id found to delete '+ productId
+            message : 'No such productId id found to delete '+ productId
         });
     }
 });
