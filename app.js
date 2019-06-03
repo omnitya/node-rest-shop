@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 //Handle incoming requests
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/users');
 
 //Mongo db connection info
 mongoose.connect('mongodb+srv://'+ process.env.MONGO_ATLAS_USERNAME+ ':'+process.env.MONGO_ATLAS_PASSWORD+'@nodejsrestapp-ds9oy.mongodb.net/test?retryWrites=true&w=majority'
@@ -37,6 +38,7 @@ app.use(bodyParser.json());
 
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/users', userRoutes);
 
 //Error Handle
 app.use((req, res, next) =>{
