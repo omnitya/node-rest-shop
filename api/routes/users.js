@@ -3,6 +3,7 @@ const router = express.Router();
 const userModel = require('../models/userModel');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 router.post('/signup', (req, res, next) => {
     userModel.find({
@@ -48,6 +49,48 @@ router.post('/signup', (req, res, next) => {
             });
         }
     })
+});
+
+router.post('/login', (req, res, next) => {
+    userModel.find({ email : req.body.email })
+    .exec()
+    .then(user => {
+        if(user.length < 1) {
+            console.log('Authentication Failed, No Such User exist');
+            return res.status(401).json({
+                message : 'Authentication Failed!'
+            });
+        }
+        bcrypt.compare(req.body.password, user[0].password, (err, result) =>{
+            if(err){
+                console.log('Authentication Failed');
+                return res.status(401).json({
+                    message : 'Authentication Failed!'
+                });
+            }
+            if(result) {
+                console.log('Authentication Successful');
+                const token = jwt.sign(
+                    {
+                        email : user[0].email,
+                        userId : user[0]._id
+                    },
+                    process.env.JWT_KEY,
+                    {
+                        expiresIn : '1h'
+                    }
+                );
+                return res.status(200).json({
+                    message : 'Authentication Successful',
+                    token : token
+                })
+            }
+            res.status(401).json({
+                message : 'Authentication Failed!'
+            });
+        });
+    })
+    .catch()
 });
 
 router.delete('/:userId', (req, res, next) => {
