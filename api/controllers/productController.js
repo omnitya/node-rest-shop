@@ -45,7 +45,7 @@ exports.products_get_product = (req, res, next) => {
                     Id : result._id,
                     request : {
                         type : 'GET',
-                        url : 'http://localhost:3000/products/' + result._id
+                        url : process.env.PRODUCT_URL + result._id
                     }
                 });
             } else{
@@ -126,7 +126,7 @@ exports.products_delete_product = (req, res, next) => {
         .then(result =>{
             console.log('Deleted product item with id ::', productId);
             res.status(200).json({
-                message : 'Deleted product item with id '+ productId
+                message : 'Deleted product item with id :: '+ productId
             });
         })
         .catch(err => {
@@ -137,7 +137,7 @@ exports.products_delete_product = (req, res, next) => {
         });
     }
     else {
-        console.log('No such productId id found to delete');
+        console.log('No such productId id found to delete', productId+ productId);
         res.status(404).json({
             message : 'No such productId id found to delete '+ productId
         });
