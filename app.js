@@ -19,7 +19,7 @@ mongoose.connect('mongodb+srv://'+ process.env.MONGO_ATLAS_USERNAME+ ':'+process
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
-  console.log("h");
+  console.log("initiated");
 });
 
 mongoose.Promise = global.Promise;
