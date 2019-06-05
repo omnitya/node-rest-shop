@@ -11,7 +11,7 @@ exports.user_signup = (req, res, next) => {
     .then(user =>{
         if(user.length > 0){
             return res.status(409).json({
-                message : 'The Email Id already exist ::' + req.body.email
+                message : 'The Email Id (' + req.body.email + ') already exist!'
             })
         } else {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
