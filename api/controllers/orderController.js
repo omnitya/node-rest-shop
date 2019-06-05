@@ -15,8 +15,8 @@ exports.orders_get_all = (req, res, next) => {
                     quantity : result.quantity,
                     request : {
                         type : 'GET',
-                        productUrl : 'http://localhost:3000/products/' + result.product,
-                        orderUrl : 'http://localhost:3000/orders/' + result._id
+                        productUrl : process.env.PRODUCT_URL + result.product,
+                        orderUrl : process.env.ORDER_URL + result._id
                     }
                 }
             })
@@ -79,7 +79,7 @@ exports.orders_get_order = (req, res, next) => {
                     Id : result._id,
                     request : {
                         type : 'GET',
-                        url : 'http://localhost:3000/orders/' + result._id
+                        url : process.env.ORDER_URL + result._id
                     }
                 });
             } else{
@@ -145,7 +145,7 @@ exports.orders_update_order = (req, res, next) => {
             mesaage : 'Product Updated',
             request : {
                 type : 'PUT',
-                url : 'http://localhost:3000/orders/' + orderId
+                url : process.env.ORDER_URL + orderId
             }
         })
     })
