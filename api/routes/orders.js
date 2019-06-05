@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const orderModel = require('../models/orderModel');
 const mongoose = require('mongoose');
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/', (req, res, next) => {
+router.get('/',checkAuth, (req, res, next) => {
     orderModel.find()
     // .populate('product','_id' )
     .exec()
@@ -34,7 +35,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/:orderId', (req, res, next) => {
+router.get('/:orderId', checkAuth, (req, res, next) => {
     const orderId = req.params.orderId;
     if(mongoose.Types.ObjectId.isValid(orderId)){
         orderModel.findById(orderId)
@@ -72,7 +73,7 @@ router.get('/:orderId', (req, res, next) => {
     }
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
     const order = new orderModel({
         _id : new mongoose.Types.ObjectId(),
         product : req.body.product,
@@ -105,7 +106,7 @@ router.post('/', (req, res, next) => {
     }
 });
 
-router.put('/:orderId', (req, res, next) => {
+router.put('/:orderId', checkAuth, (req, res, next) => {
     const orderId = req.params.orderId;
     const updateOps = {};
     for(const ops of req.body) {
@@ -131,7 +132,7 @@ router.put('/:orderId', (req, res, next) => {
     });
 });
 
-router.delete('/:orderId', (req, res, next) => {
+router.delete('/:orderId', checkAuth, (req, res, next) => {
     const orderId = req.params.orderId;
     if(mongoose.Types.ObjectId.isValid(orderId)){
         orderModel.remove({
