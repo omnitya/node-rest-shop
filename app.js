@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors')
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -29,6 +30,9 @@ app.use(bodyParser.urlencoded({
     extended : false
 }));
 app.use(bodyParser.json());
+
+//CORS-enabled web server. Needed for angular integration
+app.use(cors())
 
 //Commented out for future use of Access Control.
 // app.use((req, res, next) => {
