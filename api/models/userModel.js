@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const orderSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
     _id : mongoose.Schema.Types.ObjectId,
     email : {
         type : String, 
@@ -11,4 +11,4 @@ const orderSchema = mongoose.Schema({
     password : {type: String, required : true}
 });
 
-module.exports = mongoose.model('User', orderSchema);
+module.exports = mongoose.model('User', userSchema);
